@@ -54,8 +54,8 @@ def itersplit_into_x_chunks(argum, size, chunksize): #split sequence in chunks o
 def reverse_complement(seq): #generate RNA complement
     return seq.translate(basecomplement)[::-1]
 
-def probeLength(probe): #input desired probe length; limited to range[8,11)]
-    if probe <8 or probe >13:
+def probeLength(probe): #input desired probe length; limited to range[6,13)]
+    if probe <6 or probe >13:
         print('The value you entered is incorrect!')
         sys.exit('Try again!')
     else:
@@ -171,9 +171,9 @@ if __name__ == "__main__":
 
     while True: #probe length?
         try:
-            probe=int(input("Enter the length of probe; a number between 8 and 13: "))
+            probe=int(input("Enter the length of probe; a number between 6 and 13: "))
         except:
-            print('You must type a number between 8 and 13, try again:')
+            print('You must type a number between 6 and 13, try again:')
             continue
 
         else:
