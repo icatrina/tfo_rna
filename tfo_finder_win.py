@@ -3,6 +3,7 @@ import csv
 import sys
 import pandas as pd
 import os
+import re
 from Bio.SeqUtils import MeltingTemp as mt
 import subprocess
 #from Bio.Blast import NCBIXML
