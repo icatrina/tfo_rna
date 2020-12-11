@@ -14,7 +14,7 @@ print('TFOfinder  Copyright (C) 2017  Irina E. Catrina' + '\n'+
 'under certain conditions; for details please read the GNU_GPL.txt file included with PinMol' + '\n')
 undscr = "->"*30
 print(undscr)
-print("\n"+"WARNING: Previous files will be overwritten!  Save them in a "+"\n"+"different location than the current file, or rename them to "+"\n"+"ensure they are not misused (e.g. use probes from a different target)."+"\n")
+print("\n"+"WARNING: The input sscount file and any previous output files will be overwritten!  Save them in a "+"\n"+"different location than the current file, or rename them to "+"\n"+"ensure they are not misused (e.g. use probes from a different target)."+"\n")
 print(undscr)
 
 def readSScountFile(filename): #sscount file for molecular beacon design
