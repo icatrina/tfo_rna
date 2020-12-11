@@ -3,9 +3,9 @@ import csv
 import sys
 import pandas as pd
 import os
-import re
 from Bio.SeqUtils import MeltingTemp as mt
 import subprocess
+import re
 from Bio.Blast import NCBIXML
 print("\n"*5)
 print('TFOfinder  Copyright (C) 2017  Irina E. Catrina' + '\n'+
@@ -181,17 +181,16 @@ if __name__ == "__main__":
             probe = probeLength(probe)
             break
 
-    with open (mb_userpath+'/usetxtfile.txt', 'w') as outfile:
+    with open (filename, 'w') as outfile:
         for line in mb_baselines:
             outfile.write(line)
 
-    with open(mb_userpath+'/usetxtfile.txt', 'r') as infile, open(mb_userpath+'/sscounttxt_tocsv.csv', 'w') as csv_file:
+    with open(filename, 'r') as infile, open(mb_userpath+'/sscounttxt_tocsv.csv', 'w') as csv_file:
         next(infile)
         reader = csv.reader(infile, delimiter = ' ')
         writer = csv.writer(csv_file, delimiter = ",", lineterminator = '\n')
         writer.writerows(reader)
 
-    os.remove(mb_userpath+'/usetxtfile.txt')
 
     with open(mb_userpath+'/sscounttxt_tocsv.csv', 'r') as f:
         mb_sscount, mb_position, mb_max_base, mb_bases, mb_seq, mb_size = seqTarget(f)
@@ -223,6 +222,7 @@ if __name__ == "__main__":
         for row in reader:
             if int(row[1]) > 70 and int(row[1]) < 101:
                 writer.writerow(row)
+
 
     #sort by sscount?
     flistsort = pd.read_csv(mb_userpath+'/GA_probes.csv', sep=',', usecols=[0,1,2,3,4])
@@ -289,23 +289,9 @@ if __name__ == "__main__":
 
     os.remove(mb_userpath+'/probes_forblast.csv')
 
-    i = stemDesign() #design the stem for the molecular beacon
-    for x in range(1, int(i)+1):
-        subprocess.check_output(["fold", mb_userpath+"/Seq"+str(x)+".seq" , mb_userpath+"/Seq"+str(x)+ ".ct"])
-        subprocess.check_output(["draw", mb_userpath+"/Seq"+str(x)+".ct", mb_userpath+"/Seq"+str(x)+ ".svg", '--svg', '-n', '1'])
-    for j in range(1, int(i)+1):     #remove results that are highly structured
-        with open (mb_userpath+"/Seq"+str(j)+".ct", 'r') as gin:
-            linesa = gin.readlines()
-            #egdraw = float(linesa[0][16:20])
-            no_bs = int(linesa[0][3:5])
-            paired = int(linesa[1][23:26])
-
-        os.remove(mb_userpath+"/Seq"+str(j)+".ct")
-        os.remove(mb_userpath+"/Seq"+str(j)+".svg")
-        os.remove(mb_userpath+"/Seq"+str(j)+".seq")
-
     read_sscnt = pd.read_csv(mb_userpath+'/all_probes_sorted_ss.csv', delimiter = ',')
     no_ss = (read_sscnt["sscount"] < 0.1).sum()
+    #os.remove(mb_userpath+'/usetxtfile.txt')
 
     with open (mb_userpath+'/Final_TFOs.csv', 'a') as add_output:
         add_output.write('Results for ' + '\"'+filename +'\"'+ ' using ' + str(probe) + ' as probe length, '+'\n'+'for '+ str(no_pb) + ' probes, and for a target region between ' +
