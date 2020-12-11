@@ -14,7 +14,7 @@ print('TFOfinder  Copyright (C) 2017  Irina E. Catrina' + '\n'+
 'under certain conditions; for details please read the GNU_GPL.txt file included with PinMol' + '\n')
 undscr = "->"*30
 print(undscr)
-print("\n"+"WARNING: Previous files will be overwritten!  Save them in a "+"\n"+"different location than the current file, or rename them to "+"\n"+"ensure they are not misused (e.g. use probes from a different target)."+"\n")
+print("\n"+"WARNING: The input sscount file and previous output files will be overwritten!  Save them in a "+"\n"+"different location than the current file, or rename them to "+"\n"+"ensure they are not misused (e.g. use probes from a different target)."+"\n")
 print(undscr)
 
 def readSScountFile(filename): #sscount file for molecular beacon design
@@ -181,17 +181,16 @@ if __name__ == "__main__":
             probe = probeLength(probe)
             break
 
-    with open (mb_userpath+'\\usetxtfile.txt', 'w') as outfile:
+    with open (filename, 'w') as outfile:
         for line in mb_baselines:
             outfile.write(line)
 
-    with open(mb_userpath+'\\usetxtfile.txt', 'r') as infile, open(mb_userpath+'\\sscounttxt_tocsv.csv', 'w') as csv_file:
+    with open(filename, 'r') as infile, open(mb_userpath+'\\sscounttxt_tocsv.csv', 'w') as csv_file:
         next(infile)
         reader = csv.reader(infile, delimiter = ' ')
         writer = csv.writer(csv_file, delimiter = ",", lineterminator = '\n')
         writer.writerows(reader)
 
-    os.remove(mb_userpath+'\\usetxtfile.txt')
 
     with open(mb_userpath+'\\sscounttxt_tocsv.csv', 'r') as f:
         mb_sscount, mb_position, mb_max_base, mb_bases, mb_seq, mb_size = seqTarget(f)
@@ -288,21 +287,6 @@ if __name__ == "__main__":
     mb_pick.to_csv(mb_userpath+'\\mb_picks.csv', index=False, header = False)
 
     os.remove(mb_userpath+'\\probes_forblast.csv')
-
-    i = stemDesign() #design the stem for the molecular beacon
-    for x in range(1, int(i)+1):
-        subprocess.check_output(["fold", mb_userpath+"\\Seq"+str(x)+".seq" , mb_userpath+"\\Seq"+str(x)+ ".ct"])
-        subprocess.check_output(["draw", mb_userpath+"\\Seq"+str(x)+".ct", mb_userpath+"\\Seq"+str(x)+ ".svg", '--svg', '-n', '1'])
-    for j in range(1, int(i)+1):     #remove results that are highly structured
-        with open (mb_userpath+"\\Seq"+str(j)+".ct", 'r') as gin:
-            linesa = gin.readlines()
-            #egdraw = float(linesa[0][16:20])
-            no_bs = int(linesa[0][3:5])
-            paired = int(linesa[1][23:26])
-
-        os.remove(mb_userpath+"\\Seq"+str(j)+".ct")
-        os.remove(mb_userpath+"\\Seq"+str(j)+".svg")
-        os.remove(mb_userpath+"\\Seq"+str(j)+".seq")
 
     read_sscnt = pd.read_csv(mb_userpath+'\\all_probes_sorted_ss.csv', delimiter = ',')
     no_ss = (read_sscnt["sscount"] < 0.1).sum()
