@@ -113,38 +113,6 @@ def regionTarget(tg_start, tg_end): #if only a region of the target needs to be 
             slice2 = slice2.sort_values(by='sscount', ascending=[True]) #sort ascending by sscount = larger sscount more accessible target region
         return(slice2)
 
-    elif no_pb > 1 and no_pb <= row_no and no_pb <= 50:
-        no_pb = no_pb
-        input1 = open(mb_userpath+'/probes_sortedby5.csv', 'r').read().split('\n')
-        outputData = input1[:no_pb+1]
-        output = open(mb_userpath +'/DG_probes.csv', 'w')
-        output.write('\n'.join(outputData))
-        output.close()
-    return(no_pb)
-
-def stemDesign(): #design the stem of the final probes
-    i = 0
-    with open(mb_userpath+'/mb_picks.csv') as ff:
-        tw =[[],[]]
-        reader = csv.reader(ff)
-        for row in reader:
-            for col in range(2):
-                tw[col].append(row[col])
-        bs_ps =tw[0]
-        fseq =tw[1]
-        seq_slc = []
-
-        for item in fseq:
-            i += 1
-            seql = list(item)
-            aseq = (str(i) + " TFO sequence at base number " + bs_ps[i-1] + ' is:  '+ item)
-            print(aseq + '\n')
-            with open (mb_userpath+'/Final_TFOs.csv', 'a') as outputf:
-                outputf.write(aseq+'\n')
-            with open(mb_userpath+'/Seq'+str(i)+'.seq', 'w') as fiseq:
-                fiseq.write(';'+'\n'+ str(i) + ' at base # ' + bs_ps[i-1] + ' TFO' + '\n' + item.strip() +'1')
-        return(i)
-
 if __name__ == "__main__":
     filename = input('Enter a file name: ') # request ss-count file path and name
     mb_so, mb_userpath, mb_baselines = readSScountFile(filename)
