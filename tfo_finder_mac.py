@@ -113,27 +113,6 @@ def regionTarget(tg_start, tg_end): #if only a region of the target needs to be 
             slice2 = slice2.sort_values(by='sscount', ascending=[True]) #sort ascending by sscount = larger sscount more accessible target region
         return(slice2)
 
-def numberProbes(no_pb):  #how many probes should be retained; limited to range [2, 50]
-    if no_pb > int(tg_end-tg_start):
-        print("This number is too large! You cannot enter a number larger then "+ str(tg_end-tg_start)+ " !")
-        sys.exit('Try again!')
-    elif row_no==0:
-            print("No probes meet the criteria for the selected region, please expand the search region.")
-            sys.exit('Try again!')
-    elif no_pb > row_no and row_no > 0:
-        print("Only "+str(row_no)+" meet the criteria.  Instead of "+ str(no_pb)+", " + str(row_no)+ " probe(s) will be considered")
-        if row_no > 1:
-            no_pb = row_no
-            input1 = open(mb_userpath+'/probes_sortedby5.csv', 'r').read().split('\n')
-            output = open(mb_userpath +'/DG_probes.csv', 'w')
-            output.write('\n'.join(input1))
-            output.close()
-        elif row_no==1:
-            no_pb = row_no
-            input1 = open(mb_userpath+'/probes_sortedby5.csv', 'r')
-            output.write(input1)
-            output.close()
-
     elif no_pb > 1 and no_pb <= row_no and no_pb <= 50:
         no_pb = no_pb
         input1 = open(mb_userpath+'/probes_sortedby5.csv', 'r').read().split('\n')
@@ -253,53 +232,18 @@ if __name__ == "__main__":
         reader = csv.reader(flistsort3)
         row_no = sum(1 for row in reader)-1
         print("Maximum number of possible probes is: "+str(row_no)+"\n")
-
-    try: #how many probes?
-        no_pb = int(input ('How many probes do you want to save? Enter the maximum number of probes if smaller than 50, or a number between 2 and 50: '))
-
-    except:
-        print('You must type a number between 2 and 50!')
-        sys.exit('Try again!')
-
-    else:
-        no_pb = numberProbes(no_pb)
-
-    read1 = pd.read_csv(mb_userpath+'/DG_probes.csv', delimiter = ',', usecols=[3], skiprows=1)
-    read1.to_csv(mb_userpath+'/probes_forblast.csv', index=False)
-
-    with open (mb_userpath+'/DG_probes.csv') as f3:
-        next(f3)
-        dl = [[],[],[],[]]
-        reader = csv.reader(f3)
-        for row in reader:
-            for col in range (4):
-                dl[col].append(row[col])
-    base_no = dl[0]
-    sscntl = dl[2]
-    probe_seq = dl[3]
-
-    with open (mb_userpath+'/blast_results_picks.csv', 'w') as output2:
-        writer = csv.writer(output2)
-        writer.writerow(["Base Number","Probe Sequence", "ss-count fraction"])
-        rows = zip(base_no, probe_seq, sscntl )
-        for row in rows:
-            writer.writerow(row)
-    mb_pick = pd.read_csv(mb_userpath+'/blast_results_picks.csv', sep=',', usecols=[0,1])
-    mb_pick.to_csv(mb_userpath+'/mb_picks.csv', index=False, header = False)
-
-    os.remove(mb_userpath+'/probes_forblast.csv')
-
+ 
     read_sscnt = pd.read_csv(mb_userpath+'/all_probes_sorted_ss.csv', delimiter = ',')
     no_ss = (read_sscnt["sscount"] < 0.1).sum()
     #os.remove(mb_userpath+'/usetxtfile.txt')
 
     with open (mb_userpath+'/Final_TFOs.csv', 'a') as add_output:
-        add_output.write('Results for ' + '\"'+filename +'\"'+ ' using ' + str(probe) + ' as probe length, '+'\n'+'for '+ str(no_pb) + ' probes, and for a target region between ' +
+        add_output.write('Results for ' + '\"'+filename +'\"'+ ' using ' + str(probe) + ' as probe length, and for a target region between ' +
         str(tg_start) +' and ' + str(tg_end) + ' nucleotides:  ' + '\n' +
         '\t'+'1. Total number of possible probes =  ' + str(no_probes-1)+ '\n'+
         '\t'+'2. Number of probes that meet GA > 70% and energetic criteria =  ' + str(row_no) + '\n'
         '\t'+'3. Number of probes that have an ss-count fraction smaller than 0.5 =  ' + str(no_ss)+ '\n')
-    print('Results for ' + '\"'+filename +'\"'+ ' using ' + str(probe) + ' as probe length, '+'\n'+'for '+ str(no_pb) + ' probes, and for a target region between ' +
+    print('Results for ' + '\"'+filename +'\"'+ ' using ' + str(probe) + ' as probe length, and for a target region between ' +
         str(tg_start) +' and ' + str(tg_end) + ' nucleotides:  ' + '\n')
     print('\t'+'1. Total number of possible probes =  ' + str(no_probes-1)+ '\n')
     print('\t'+'2. Number of probes that have a GA content > 70% =  '+ str(no_GAprobes-1)+ '\n' )
