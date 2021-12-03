@@ -240,6 +240,6 @@ if __name__ == "__main__":
     print('\t'+'2. Total Number of probes that have a GA content > 70% =  '+ str(no_GAprobes-1)+ '\n' )
     print('\t'+'3. Total Number of probes that have an ss-count fraction smaller than 0.1 =  ' + str(no_ss)+ '\n')
 
-    print("\n"+"This information can be also be found in the file"+'\\'+fname+"_Final_TFOs.csv"+"\n")
+    print("\n"+"This information can be also be found in the file " + mb_userpath +'/'+fname+"_Final_TFOs.csv"+"\n")
     print("\n"+"To select the best TFO, check GA_probes.csv file (sequences with GA content > 70%) for the smallest sscount and largest GA%, note that the GA% is the purine content in the target not in the probe sequence."+"\n")
     #print("\n"+"Finally, to avoid false positives you need to check for mostly single stranded sequences complementary to the selected probe(s) in other mRNAs expressed in the tissue of interest."+"\n")
