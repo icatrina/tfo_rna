@@ -102,11 +102,11 @@ if __name__ == "__main__":
         else:
             probe = probeLength(probe)
             break
-    with open(filein,'r') as firstfile, open(mb_userpath+'\\'+fname+'_new_input.txt','w') as ct_file:
+    with open(filein,'r') as firstfile, open(mb_userpath+'/'+fname+'_new_input.txt','w') as ct_file:
         for line in firstfile:
                  ct_file.write(line)
 
-    ct_file = mb_userpath+'\\'+fname+'_new_input.txt'
+    ct_file = mb_userpath+'/'+fname+'_new_input.txt'
     strct = 0
     with open(ct_file, 'r') as infile:
         for row in infile:
@@ -119,7 +119,7 @@ if __name__ == "__main__":
         if lines == '': continue
         print (lines2)
 
-    with open(ct_file, 'r') as infile2, open(mb_userpath+'\\'+fname+'_base_file.csv', 'w') as csv_file:
+    with open(ct_file, 'r') as infile2, open(mb_userpath+'/'+fname+'_base_file.csv', 'w') as csv_file:
         reader = csv.reader(infile2)
         writer = csv.writer(csv_file, delimiter = ',', lineterminator = '\n')
         writer.writerow(["baseno","base","bs_bf", "bs_aft", "bs_bind", "base2"])
@@ -128,10 +128,10 @@ if __name__ == "__main__":
                 writer.writerow(row)
                 csv_file.flush() # whenever you want
 
-    mb_pick = pd.read_csv(mb_userpath+'\\'+fname+'_base_file.csv', sep=',', usecols=[0,1,4], dtype=object)
-    mb_pick.to_csv(mb_userpath+'\\'+fname+'_three_col.csv', index=False)
+    mb_pick = pd.read_csv(mb_userpath+'/'+fname+'_base_file.csv', sep=',', usecols=[0,1,4], dtype=object)
+    mb_pick.to_csv(mb_userpath+'/'+fname+'_three_col.csv', index=False)
 
-    with open (mb_userpath+'\\'+fname+'_three_col.csv', 'r') as infile3, open(mb_userpath+'\\'+fname+'_sscount1.csv', 'w') as outfile3:
+    with open (mb_userpath+'/'+fname+'_three_col.csv', 'r') as infile3, open(mb_userpath+'/'+fname+'_sscount1.csv', 'w') as outfile3:
         cls = [[],[],[]]
         reader = csv.reader(infile3)
         for row in reader:
@@ -148,14 +148,14 @@ if __name__ == "__main__":
         for row in rows:
             writer.writerow(row)
 
-    df = pd.read_csv(mb_userpath+'\\'+fname+'_sscount1.csv')
+    df = pd.read_csv(mb_userpath+'/'+fname+'_sscount1.csv')
 
     df_grouped = df.groupby(['baseno', 'base'], as_index = False).sum()
 
     a = pd.DataFrame(df_grouped)
-    a.to_csv(mb_userpath+'\\'+fname+'_base_grouped.csv', index=False)
+    a.to_csv(mb_userpath+'/'+fname+'_base_grouped.csv', index=False)
 
-    with open (mb_userpath+'\\'+fname+'_base_grouped.csv', 'r') as infile4, open(mb_userpath+'\\'+fname+'_sscount.csv', 'w') as outfile4:
+    with open (mb_userpath+'/'+fname+'_base_grouped.csv', 'r') as infile4, open(mb_userpath+'/'+fname+'_sscount.csv', 'w') as outfile4:
         cls = [[],[],[]]
         reader = csv.reader(infile4)
         next(infile4)
@@ -172,42 +172,42 @@ if __name__ == "__main__":
         for row in rows:
             writer.writerow(row)
 
-    with open(mb_userpath+'\\'+fname+'_sscount.csv', 'r') as f:
+    with open(mb_userpath+'/'+fname+'_sscount.csv', 'r') as f:
         mb_sscount, mb_position, mb_max_base, mb_bases, mb_seq, mb_size = seqTarget(f)
 
     basecomplement = str.maketrans({'A': 'U', 'C': 'G', 'G': 'C', 'U': 'A'})
     mb_jl, mb_perl, mb_sumsl, mb_basesl, mb_Tml = seqProbes(mb_seq, mb_size, mb_sscount, probe)
 
-    with open(mb_userpath+'\\'+fname+'_all_probes.csv', 'w') as csv_file:
+    with open(mb_userpath+'/'+fname+'_all_probes.csv', 'w') as csv_file:
         writer = csv.writer(csv_file, lineterminator='\n')
         writer.writerow(["Base number", "%GC", "sscount", "Parallel TFO Probe sequence", "Tm"])
         rows = zip(mb_jl,mb_perl,mb_sumsl,mb_basesl,mb_Tml)
         for row in rows:
             writer.writerow(row)
 
-    mb_pick2 = pd.read_csv(mb_userpath+'\\'+fname+'_base_file.csv', sep=',', usecols=[0,1,4])
+    mb_pick2 = pd.read_csv(mb_userpath+'/'+fname+'_base_file.csv', sep=',', usecols=[0,1,4])
     mb_pick3 = mb_pick.loc[(mb_pick2['bs_bind']>0) & (mb_pick2['base'] == "G") | (mb_pick2['base'] == "A") &
                                (mb_pick2['bs_bind']>0)]
-    mb_pick3.to_csv(mb_userpath+'\\'+fname+'_three_col2.csv')
+    mb_pick3.to_csv(mb_userpath+'/'+fname+'_three_col2.csv')
     count_ds_R = mb_pick3['baseno'].value_counts()
-    dff1 = count_ds_R.to_csv(mb_userpath+'\\'+fname+'_test3.csv', sep=',')
-    dff2 = pd.read_csv(mb_userpath+'\\'+fname+'_test3.csv', sep = ',')
+    dff1 = count_ds_R.to_csv(mb_userpath+'/'+fname+'_test3.csv', sep=',')
+    dff2 = pd.read_csv(mb_userpath+'/'+fname+'_test3.csv', sep = ',')
     count_ds_R2 = dff2.sort_values(by=['Unnamed: 0'])
-    df = count_ds_R2.to_csv(mb_userpath+'\\'+fname+'_count_Rs_so.csv', index = False)
-    df1 = pd.read_csv(mb_userpath+'\\'+fname+'_count_Rs_so.csv')
+    df = count_ds_R2.to_csv(mb_userpath+'/'+fname+'_count_Rs_so.csv', index = False)
+    df1 = pd.read_csv(mb_userpath+'/'+fname+'_count_Rs_so.csv')
     df1['index_diff'] = df1['Unnamed: 0'].diff() 
     consec_pick = df1.loc[(df1['index_diff']==1)] 
-    consec_pick.to_csv(mb_userpath+'\\'+fname+'_all_consecutives.csv', index = False)
-    consec_pick1 = pd.read_csv(mb_userpath+'\\'+fname+'_all_consecutives.csv')
+    consec_pick.to_csv(mb_userpath+'/'+fname+'_all_consecutives.csv', index = False)
+    consec_pick1 = pd.read_csv(mb_userpath+'/'+fname+'_all_consecutives.csv')
 
     pick = probe-2
     consec_pick1['index_consec'] = consec_pick1['Unnamed: 0'].diff(periods=pick)
-    consec_pick1.to_csv(mb_userpath+'\\'+fname+'_all_consec_'+ str(probe)+'.csv', index = False)
+    consec_pick1.to_csv(mb_userpath+'/'+fname+'_all_consec_'+ str(probe)+'.csv', index = False)
     consec_pick2 = consec_pick1.loc[consec_pick1['index_consec']==pick]
-    consec_pick2.to_csv(mb_userpath+'\\'+fname+'_final_'+str(probe)+'consec.txt', index = False)
+    consec_pick2.to_csv(mb_userpath+'/'+fname+'_final_'+str(probe)+'consec.txt', index = False)
 
 
-    with open(mb_userpath+'\\'+fname+'_all_probes.csv') as f, open(mb_userpath+'\\'+fname+'_final_'+str(probe)+'consec.txt', 'r') as f1, open(mb_userpath+'\\'+fname+'_TFO_probes.txt', 'a') as f2:
+    with open(mb_userpath+'/'+fname+'_all_probes.csv') as f, open(mb_userpath+'/'+fname+'_final_'+str(probe)+'consec.txt', 'r') as f1, open(mb_userpath+'/'+fname+'_TFO_probes.txt', 'a') as f2:
         next(f)
         next(f1)
         reader = csv.reader(f1, delimiter=",")        
@@ -222,13 +222,13 @@ if __name__ == "__main__":
                     break
             writer.writerow(row)
 
-    os.remove(mb_userpath+'\\'+fname+'_new_input.txt')
-    os.remove(mb_userpath+'\\'+fname+'_base_file.csv')
-    os.remove(mb_userpath+'\\'+fname+'_three_col.csv')
-    os.remove(mb_userpath+'\\'+fname+'_count_Rs_so.csv')
-    os.remove(mb_userpath+'\\'+fname+'_all_consecutives.csv')
-    os.remove(mb_userpath+'\\'+fname+'_three_col2.csv')
-    os.remove(mb_userpath+'\\'+fname+'_all_probes.csv')
-    os.remove(mb_userpath+'\\'+fname+'_base_grouped.csv')
-    os.remove(mb_userpath+'\\'+fname+'_sscount1.csv')
-    os.remove(mb_userpath+'\\'+fname+'_test3.csv')
+    os.remove(mb_userpath+'/'+fname+'_new_input.txt')
+    os.remove(mb_userpath+'/'+fname+'_base_file.csv')
+    os.remove(mb_userpath+'/'+fname+'_three_col.csv')
+    os.remove(mb_userpath+'/'+fname+'_count_Rs_so.csv')
+    os.remove(mb_userpath+'/'+fname+'_all_consecutives.csv')
+    os.remove(mb_userpath+'/'+fname+'_three_col2.csv')
+    os.remove(mb_userpath+'/'+fname+'_all_probes.csv')
+    os.remove(mb_userpath+'/'+fname+'_base_grouped.csv')
+    os.remove(mb_userpath+'/'+fname+'_sscount1.csv')
+    os.remove(mb_userpath+'/'+fname+'_test3.csv')
