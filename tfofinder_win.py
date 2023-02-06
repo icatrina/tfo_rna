@@ -46,8 +46,8 @@ def itersplit_into_x_chunks(argum, size, chunksize): #split sequence in chunks o
 def parallel_complement(seq): #generate RNA complement
     return seq.translate(basecomplement)[::1]
 
-def probeLength(probe): #input desired probe length; limited to range[18,26]
-    if probe <4 or probe >12:
+def probeLength(probe): #input desired probe length; limited to range[4,30]
+    if probe <4 or probe >30:
         print('The value you entered is incorrect!')
         sys.exit('Try again!')
     else:
@@ -94,9 +94,9 @@ if __name__ == "__main__":
 
     while True: #probe length?
         try:
-            probe=int(input("Enter the length of TFO probe; a number between 4 and 12: "))
+            probe=int(input("Enter the length of TFO probe; a number between 4 and 30: "))
         except:
-            print('You must type a number between 4 and 12, try again:')
+            print('You must type a number between 4 and 30, try again:')
             continue
 
         else:
