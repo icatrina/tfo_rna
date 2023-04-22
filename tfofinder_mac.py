@@ -19,7 +19,6 @@ print(undscr)
 #filein = input("Enter the ct file path and name: ")
 #mb_userpath = os.path.dirname(filein)
 
-
 def readSScountFile(filein): #sscount file for molecular beacon design
     mb_userpath = os.path.dirname(filein) #use the path of input to save all files
     fname=Path(filein).stem
